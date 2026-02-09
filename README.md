@@ -9,7 +9,10 @@ The system follows a **modular, class-based architecture**, is fully **stateless
 
 ## Tech I Used
 - **Node.js & Express** – Foundation of the server  
-- **VirusTotal API** – Real-time URL reputation and threat intelligence   
+- **VirusTotal API** – Real-time URL reputation and threat intelligence
+- **Dotenv** – Secure configuration and secret management
+- **Axios** – Efficient HTTP client for external API communication
+- **CORS** – Middleware for handling cross-origin requests
 ---
 
 ## Engineering Decisions

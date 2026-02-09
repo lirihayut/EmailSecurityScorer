@@ -1,2 +1,71 @@
-# EmailSecurityScorer
-A high-performance Node.js analytical engine designed to detect phishing and malicious emails in real-time. The system processes email metadata through a weighted scoring engine and integrates with global threat intelligence to protect users from modern email threats.
+# Upwind Email Security Scorer (Backend)
+
+This backend analytical engine detects phishing and malicious emails in real-time.  
+It provides a clear security verdict directly in the Gmail interface using a **weighted scoring model** and **external threat intelligence**.  
+
+The system follows a **modular, class-based architecture**, is fully **stateless**, and uses **ngrok** to connect cloud-to-local for development and testing.
+
+---
+
+## Tech I Used
+- **Node.js & Express** – Foundation of the server  
+- **VirusTotal API** – Real-time URL reputation and threat intelligence  
+- **ngrok** – Secure tunneling to bridge Google Workspace Cloud with Localhost  
+- **Google Apps Script** – Building the native Gmail Add-on UI  
+
+---
+
+## Engineering Decisions
+
+1. **Class-Based Logic Separation**  
+   Unified `ScoringEngine` and `VirusTotalService` in an integrated Analysis Layer. Ensures high cohesion and makes security logic independent of HTTP transport.
+
+2. **Stateless Privacy Design**  
+   Server is 100% stateless. Email metadata is analyzed in-memory and never stored, meeting strict data privacy standards.
+
+3. **Weighted Scoring Model (0-100)**  
+   Multi-vector scoring algorithm aggregates signals from SPF headers, URL reputation, and personal blacklists for nuanced verdicts rather than a simple binary check.
+
+4. **Explainability & Transparency**  
+   API provides the "why" behind every score, returning reasons like `"SPF failure"` or `"Malicious link detected"` so users can make informed decisions.
+
+5. **Cloud-to-Local Bridge (ngrok)**  
+   Enables seamless testing of the Gmail Add-on lifecycle locally against the Node.js backend.
+
+---
+
+## Project Structure
+```
+
+src/
+├─ routes/ # Defines API endpoints (Scan, Settings)
+├─ controllers/ # Orchestrates requests between UI and Logic
+├─ analysis/ # "Brain" of the system (ScoringEngine & VirusTotalService)
+│ ├─ scoringEngine.js
+│ └─ virusTotalService.js
+
+````
+
+## API Endpoints
+- **POST** `/api/v1/scan` – Executes full analysis pipeline (Sender, Body, Links, SPF)  
+- **POST** `/api/v1/settings/blacklist` – Adds a sender to the user's personal block list  
+- **DELETE** `/api/v1/settings/blacklist/:email` – Removes a sender from the user's personal block list  
+
+
+---
+
+## How to Run It
+
+
+1. Install dependencies:
+```bash
+npm install
+````
+
+2. Start the server:
+
+```bash
+npm start
+```
+
+Server runs at: `http://localhost:3000`
